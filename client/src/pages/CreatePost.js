@@ -1,26 +1,7 @@
-import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
-
-const modules = {
-    toolbar: [
-        ['bold', 'italic', 'underline', 'strike'],
-        ['blockquote', 'code-block'],
-        ['link', 'image', 'video', 'formula'],
-        [{ 'header': 1 }, { 'header': 2 }],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
-        [{ 'script': 'sub' }, { 'script': 'super' }],
-        [{ 'indent': '-1' }, { 'indent': '+1' }],
-        [{ 'direction': 'rtl' }],
-        [{ 'size': ['small', false, 'large', 'huge'] }],
-        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        [{ 'color': [] }, { 'background': [] }],
-        [{ 'font': [] }],
-        [{ 'align': [] }],
-        ['clean'],
-    ],
-};
+import Editor from '../Editor';
 
 export default function CreatePost() {
     const [content, setContent] = useState('');
@@ -72,88 +53,58 @@ export default function CreatePost() {
     }
 
     return (
-        <form onSubmit={createNewPost} style={{ maxWidth: '500px', margin: '0 auto' }}>
-            {/* Title Input */}
-            <div style={{ marginBottom: '15px' }}>
-                <input 
-                    type="text" 
-                    placeholder="Title" 
-                    value={title} 
-                    onChange={(e) => setTitle(e.target.value)} 
-                    style={{
-                        width: '100%',
-                        padding: '8px',
-                        borderRadius: '4px',
-                        border: '1px solid #ccc',
-                    }}
-                />
-                {errors.title && (
-                    <span style={{ color: 'red', fontSize: '0.875rem' }}>{errors.title}</span>
-                )}
-            </div>
+        <form onSubmit={createNewPost}>
+            <div className="post-form">
+                {/* Title Input */}
+                <div className="input-group">
+                    <input 
+                        type="text" 
+                        placeholder="Title" 
+                        value={title} 
+                        onChange={(e) => setTitle(e.target.value)} 
+                    />
+                    {errors.title && (
+                        <span className="error-message">{errors.title}</span>
+                    )}
+                </div>
 
-            {/* Summary Input */}
-            <div style={{ marginBottom: '15px' }}>
-                <input 
-                    type="text" 
-                    placeholder="Summary" 
-                    value={summary} 
-                    onChange={(e) => setSummary(e.target.value)} 
-                    style={{
-                        width: '100%',
-                        padding: '8px',
-                        borderRadius: '4px',
-                        border: '1px solid #ccc',
-                    }}
-                />
-                {errors.summary && (
-                    <span style={{ color: 'red', fontSize: '0.875rem' }}>{errors.summary}</span>
-                )}
-            </div>
+                {/* Summary Input */}
+                <div className="input-group">
+                    <input 
+                        type="text" 
+                        placeholder="Summary" 
+                        value={summary} 
+                        onChange={(e) => setSummary(e.target.value)} 
+                    />
+                    {errors.summary && (
+                        <span className="error-message">{errors.summary}</span>
+                    )}
+                </div>
 
-            {/* File Input */}
-            <div style={{ marginBottom: '15px' }}>
-                <input 
-                    type="file" 
-                    onChange={(ev) => setFiles(ev.target.files)} 
-                    style={{
-                        padding: '8px',
-                        borderRadius: '4px',
-                        border: '1px solid #ccc',
-                    }}
-                />
-                {errors.files && (
-                    <span style={{ color: 'red', fontSize: '0.875rem' }}>{errors.files}</span>
-                )}
-            </div>
+                {/* File Input */}
+                <div className="input-group">
+                    <input 
+                        type="file" 
+                        onChange={(ev) => setFiles(ev.target.files)} 
+                    />
+                    {errors.files && (
+                        <span className="error-message">{errors.files}</span>
+                    )}
+                </div>
 
-            {/* Content Editor */}
-            <div style={{ marginBottom: '15px' }}>
-                <ReactQuill
-                    value={content}
-                    onChange={setContent}
-                    modules={modules}
-                    theme="snow"
-                />
-                {errors.content && (
-                    <span style={{ color: 'red', fontSize: '0.875rem' }}>{errors.content}</span>
-                )}
-            </div>
+                {/* Content Editor */}
+                <div className="editor-container">
+                    <Editor value={content} onChange={setContent} />
+                    {errors.content && (
+                        <span className="error-message">{errors.content}</span>
+                    )}
+                </div>
 
-            {/* Submit Button */}
-            <button
-                type="submit"
-                style={{
-                    backgroundColor: '#007bff',
-                    color: '#fff',
-                    padding: '10px 15px',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                }}
-            >
-                Create Post
-            </button>
+                {/* Submit Button */}
+                <button type="submit" className="submit-button">
+                    Create Post
+                </button>
+            </div>
         </form>
     );
 }
