@@ -33,7 +33,6 @@ export default function CreatePost() {
     async function createNewPost(ev) {
         ev.preventDefault();
 
-        // Validation logic
         const newErrors = {};
         if (!title.trim()) newErrors.title = 'Title is required.';
         if (!summary.trim()) newErrors.summary = 'Summary is required.';
@@ -42,7 +41,6 @@ export default function CreatePost() {
 
         setErrors(newErrors);
 
-        // Stop form submission if there are errors
         if (Object.keys(newErrors).length > 0) return;
 
         const data = new FormData();
@@ -55,6 +53,7 @@ export default function CreatePost() {
             const response = await fetch('http://localhost:4000/post', {
                 method: 'POST',
                 body: data,
+                credentials: 'include',
             });
 
             if (response.ok) {
