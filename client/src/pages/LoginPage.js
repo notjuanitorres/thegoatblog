@@ -1,27 +1,16 @@
-// LoginPage.js
-import { useState, useEffect } from 'react';
+import { useContext, useState } from 'react';
 import { Navigate } from 'react-router-dom';
+import { UserContext } from '../UserContext';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const { userInfo, setUserInfo } = useContext(UserContext);
 
-  useEffect(() => {
-    fetch('http://localhost:4000/profile', {
-      credentials: 'include',
-    })
-      .then(response => {
-        if (response.ok) {
-          setIsLoggedIn(true);
-        }
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+  if (userInfo?.username) {
+    return <Navigate to="/" />;
+  }
 
   async function login(ev) {
     ev.preventDefault();
@@ -34,7 +23,9 @@ export default function LoginPage() {
       });
       
       if (response.ok) {
-        window.location.href = '/';
+        response.json().then(userInfo => {
+          setUserInfo(userInfo);
+        });
       } else {
         setError('Invalid credentials');
       }
@@ -43,27 +34,19 @@ export default function LoginPage() {
     }
   }
 
-  if (loading) {
-    return null; // or a loading spinner if you prefer
-  }
-
-  if (isLoggedIn) {
-    return <Navigate to="/" />;
-  }
-
   return (
     <form className="login" onSubmit={login}>
       <h1>Login</h1>
       {error && <div className="error" style={{color: 'red', marginBottom: '20px'}}>{error}</div>}
       <input
         type="text"
-        placeholder="username"
+        placeholder="Username"
         value={username}
         onChange={ev => setUsername(ev.target.value)}
       />
       <input
         type="password"
-        placeholder="password"
+        placeholder="Password"
         value={password}
         onChange={ev => setPassword(ev.target.value)}
       />

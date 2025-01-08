@@ -1,33 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { UserContext } from './UserContext';
 
 export default function Header() {
-  const [username, setUsername] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  const fetchProfile = () => {
-    fetch('http://localhost:4000/profile', {
-      credentials: 'include',
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error('Not authenticated');
-      })
-      .then(userInfo => {
-        setUsername(userInfo.username);
-      })
-      .catch(() => {
-        setUsername(null);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
+  const { userInfo, setUserInfo } = useContext(UserContext);
 
   useEffect(() => {
-    fetchProfile();
+    fetch('http://localhost:4000/profile', {
+      credentials: 'include',
+    }).then(response => {
+      response.json().then(userInfo => {
+        setUserInfo(userInfo);
+      });
+    });
   }, []);
 
   function logout() {
@@ -35,26 +20,17 @@ export default function Header() {
       credentials: 'include',
       method: 'POST',
     }).then(() => {
-      setUsername(null);
+      setUserInfo(null);
     });
-  }
-
-  if (loading) {
-    return (
-      <header>
-        <Link to="/" className="logo">The GOAT Blog</Link>
-        <nav>Loading...</nav>
-      </header>
-    );
   }
 
   return (
     <header>
       <Link to="/" className="logo">The GOAT Blog</Link>
       <nav>
-        {username ? (
+        {userInfo?.username ? (
           <>
-            <span>Hello, {username}!</span>
+            <span>Hello, {userInfo.username}!</span>
             <button onClick={logout}>Logout</button>
           </>
         ) : (
