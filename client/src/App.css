@@ -94,3 +94,30 @@ button{
 form h1{
     text-align: center;
 }
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .user-info span {
+    margin: 0;
+  }
+  
+  .user-info button {
+    margin: 0;
+    padding: 5px 15px;
+    width: auto;
+  }
+
+  nav {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
+  
+  nav a {
+    text-decoration: none;
+    color: inherit;
+  }

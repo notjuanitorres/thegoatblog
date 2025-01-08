@@ -30,8 +30,11 @@ export default function Header() {
       <nav>
         {userInfo?.username ? (
           <>
-            <span>Hello, {userInfo.username}!</span>
-            <button onClick={logout}>Logout</button>
+            <Link to="/create">Create new post</Link>
+            <div className="user-info">
+              <span>Hello, {userInfo.username}!</span>
+              <button onClick={logout}>Logout</button>
+            </div>
           </>
         ) : (
           <>
